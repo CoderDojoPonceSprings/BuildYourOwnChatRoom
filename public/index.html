@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Chat by Josh Gough</title>
+    <script src='https://code.jquery.com/jquery-2.1.0.min.js'></script>
+    <script>
+var msgs = [];
+
+function msgPost() {
+  $.post("/msgs", "msg=Hey it's me!");
+}    
+
+function msgsGet() {
+  var since = $('#since').val();
+  if (!since) {
+    since = "";
+  }
+  $.get("/msgs/" + since, function(newMsgs) {
+    newMsgs.forEach(function(msg) {
+      msgs.push(msg);
+    });
+    console.log(msgs.length);
+  });
+}
+
+var autoRefreshTimerId = null;
+
+function autoRefreshStart() {
+  autoRefreshStop();
+  autoRefreshTimerId = window.setInterval(msgsGet, 2500);
+}
+
+function autoRefreshStop() {
+  if (autoRefreshTimerId != null) {
+    window.clearInterval(autoRefreshTimerId);
+    autoRefreshTimerId = null;
+  }
+}
+    </script>
+  </head>
+  <body>
+    <h1>Build your own chat room</h1>
+
+    <section id='form'>
+      <input type='text' /> <button onclick='msgPost()'>Send</button>
+    </section>
+    <hr />
+    Show messages since: <input type='text' id='since' />
+    <button onclick='msgsGet()'>Refresh</button>
+    <button onclick='autoRefreshStart()'>Start Auto-Refresh</button>
+    <button onclick='autoRefreshStop()'>Stop Auto-Refresh</button>
+    <section id='msgs'>
+    </section>
+  </body>
+</html>
