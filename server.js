@@ -4,13 +4,33 @@ var express = require('express'),
 // Keep an array of messages
 var msgs = [];
 
+// Serve index.html as static text
+app.use(express.static(__dirname + '/public'));
 
 // Convenience for allowing CORS on routes - GET and POST
-app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*'); 
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); 
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+app.use(function(req, res, next) {
+  var oneof;
+  oneof = false;
+  if (req.headers.origin) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    oneof = true;
+  }
+  if (req.headers["access-control-request-method"]) {
+    res.header("Access-Control-Allow-Methods", req.headers["access-control-request-method"]);
+    oneof = true;
+  }
+  if (req.headers["access-control-request-headers"]) {
+    res.header("Access-Control-Allow-Headers", req.headers["access-control-request-headers"]);
+    oneof = true;
+  }
+  if (oneof) {
+    res.header("Access-Control-Max-Age", 60 * 60 * 24 * 365);
+  }
+  if (oneof && req.method === "OPTIONS") {
+    return res.send(200);
+  } else {
+    return next();
+  }
 });
 
 app.use(express.urlencoded());
@@ -53,8 +73,6 @@ app.post('/msgs', function(req, res) {
   msgs.push(msg);
   res.send("OK");
 });
-
-app.use(express.static(__dirname + '/public'));
 
 var port = process.env.PORT || 80;
 
