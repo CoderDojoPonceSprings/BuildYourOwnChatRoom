@@ -10,15 +10,22 @@ function msgPost() {
   $.post("/msgs", "msg=Hey it's me!");
 }    
 
+var refreshSince = "";
+
 function msgsGet() {
   var since = $('#since').val();
   if (!since) {
-    since = "";
+    since = refreshSince;
   }
+  console.log("since:");
+  console.log(since);
   $.get("/msgs/" + since, function(newMsgs) {
-    newMsgs.forEach(function(msg) {
+    newMsgs.msgs.forEach(function(msg) {
+      console.log(msg);
       msgs.push(msg);
     });
+    refreshSince = newMsgs.refreshSince;
+    console.log(refreshSince);
     console.log(msgs.length);
   });
 }
@@ -41,6 +48,45 @@ function autoRefreshStop() {
   <body>
     <h1>Build your own chat room</h1>
 
+    <p>
+    Today you're going to learn how to create your own web chat room
+    that you can add into your own web page and chat with visitors
+    to your site.
+    </p>
+
+    <p>By taking this quest, you'll learn all about the fundamentals
+      of how the web works, including how to GET data from web servers and POST data to web servers. That might sound simple to you. Well, it is pretty simple once you know about a few tools that can help you make it even simpler!</p>
+
+    <p>Before we start programming the chat room, let's look at the finished product in action so you can understand what you'll build and what it will be like to use once you finish!</p>
+
+    <aside>
+      <p>If you're completely new to the web and to programming in general, then here is an exercise you can do on paper understand what we're doing.</p>
+      <h2>Supplies:</h2>
+      <ul>
+        <li>Several sheets of paper and pen or pencil</li>
+        <li>Two other friends. One will do, but it's better with two!</li>
+      </ul>
+      <h2>Steps:</h2>
+      <ul>
+          <li>Starting on one sheet of paper, write a heading at the top: <strong>Messages:</strong></li>
+          <li>Decide who will be the first message writer.</li>
+          <li>For the other two, close your eyes or stand somewhere where you cannot see what your friend is writing.</li>
+          <li>First message writer: write down a short message on the line after the <strong>Messages:</strong> heading, then hand the paper and pen to one of your other friends.</li>
+          <li>Take turns writing and passing the sheet to each other.</li>
+      </ul>
+      <h2>Questions:</h2>
+        <li>Assuming you are a group of three, how would you communicate with the paper if two of you had to stay in different rooms, and only one of you could move from one room to the other at a time?</li>
+        <li>What if you had ten other friends who you wanted to see your messages? How long would it take for each of them to see it using this paper process?</li>
+        <li>What if you had a message that you wanted the whole world to see? How long do you think it would take if you had to hand deliver it to each person?</li>
+        <li>What if you could send it in the mail?</li>
+        <li>What else could you do to get it to more people faster?</li>
+    </p>
+
+
+
+      <p>First, get a sheet of paper and a pencil or find a whiteboard and a marker.
+
+    </aside>
     <section id='form'>
       <input type='text' /> <button onclick='msgPost()'>Send</button>
     </section>
