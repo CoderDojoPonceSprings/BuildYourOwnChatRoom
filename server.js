@@ -4,6 +4,15 @@ var express = require('express'),
 // Keep an array of messages
 var msgs = [];
 
+
+// Convenience for allowing CORS on routes - GET and POST
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*'); 
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); 
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.use(express.urlencoded());
 
 function createResponse(newMsgs) {
@@ -46,14 +55,6 @@ app.post('/msgs', function(req, res) {
 });
 
 app.use(express.static(__dirname + '/public'));
-
-// Convenience for allowing CORS on routes - GET and POST
-app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*'); 
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); 
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
 
 var port = process.env.PORT || 80;
 
