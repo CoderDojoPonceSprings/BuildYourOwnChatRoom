@@ -47,19 +47,16 @@ app.post('/msgs', function(req, res) {
 
 app.use(express.static(__dirname + '/public'));
 
+// Convenience for allowing CORS on routes - GET and POST
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*'); 
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); 
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 var port = process.env.PORT || 80;
 
 app.listen(port, null, function (err) {
   console.log('Your chat server is listening at: http://localhost:' + port);
 });
-
-
-/*
-// Convenience for allowing CORS on routes - GET only
-app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*'); 
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS'); 
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
-*/
