@@ -6,35 +6,76 @@
     <script>
 var msgs = [];
 
-function msgPost() {
-  $.post("/msgs", "msg=Hey it's me!");
-}    
+function msgPost(msg, callback) {
+  $.post("http://buildyourownchatroom.azurewebsites.net/msgs", "msg=" + encodeURIComponent(msg), function(response) {
+      if (callback) {
+        callback(response);
+      }
+  });
+}
+
+function msgPostClick() {
+  var msg = $('#msg').val();
+  if (!msg) {
+    alert('Please type something in the textbox before sending!');
+  } else {
+    msgPost(msg, function(response) {
+      if (response == "OK") {
+        $('#msg').val('');
+      }
+    });
+  }
+}
 
 var refreshSince = "";
 
-function msgsGet() {
+function msgsGet(since, callback) {
+  $.get("http://buildyourownchatroom.azurewebsites.net/msgs/" + since, function(newMsgs) {
+    newMsgs.msgs.forEach(function(msg) {
+      msgs.push(msg);
+    });
+    refreshSince = newMsgs.refreshSince;
+    if (callback) {
+      callback(newMsgs, msgs);
+    }
+  });
+}
+
+function msgsGetRefreshClick() {
   var since = $('#since').val();
   if (!since) {
     since = refreshSince;
   }
-  console.log("since:");
-  console.log(since);
-  $.get("/msgs/" + since, function(newMsgs) {
-    newMsgs.msgs.forEach(function(msg) {
-      console.log(msg);
-      msgs.push(msg);
-    });
-    refreshSince = newMsgs.refreshSince;
-    console.log(refreshSince);
-    console.log(msgs.length);
-  });
+  function onMsgsUpdated(newMsgs, allMsgs) {
+    console.log('All Messages');
+    console.log(allMsgs);    
+    console.log('New messages:');
+    console.log(newMsgs);
+  }
+  msgsGet(since, onMsgsUpdated);
 }
 
 var autoRefreshTimerId = null;
 
+var autoRefreshListenerFunctions = [];
+
+function autoRefreshListenerAdd(listener) {
+  autoRefreshListenerFunctions.push(listener);
+}
+
 function autoRefreshStart() {
   autoRefreshStop();
-  autoRefreshTimerId = window.setInterval(msgsGet, 2500);
+  function autoRefreshComplete(newMsgs, allMsgs) {
+    if (autoRefreshListenerFunctions.length > 0) {
+      autoRefreshListenerFunctions.forEach(function(func) {
+        func(newMsgs, allMsgs);
+      });
+    }
+  }
+  function invokeMsgsGet() {
+    msgsGet(refreshSince, autoRefreshComplete);
+  }
+  autoRefreshTimerId = window.setInterval(invokeMsgsGet, 2500);
 }
 
 function autoRefreshStop() {
@@ -75,11 +116,14 @@ function autoRefreshStop() {
           <li>Take turns writing and passing the sheet to each other.</li>
       </ul>
       <h2>Questions:</h2>
+      <ul>
         <li>Assuming you are a group of three, how would you communicate with the paper if two of you had to stay in different rooms, and only one of you could move from one room to the other at a time?</li>
         <li>What if you had ten other friends who you wanted to see your messages? How long would it take for each of them to see it using this paper process?</li>
         <li>What if you had a message that you wanted the whole world to see? How long do you think it would take if you had to hand deliver it to each person?</li>
         <li>What if you could send it in the mail?</li>
         <li>What else could you do to get it to more people faster?</li>
+      </ul>
+      <h1></h1>
     </p>
 
 
@@ -88,11 +132,11 @@ function autoRefreshStop() {
 
     </aside>
     <section id='form'>
-      <input type='text' /> <button onclick='msgPost()'>Send</button>
+      <input type='text' id='msg' /> <button onclick='msgPostClick()'>Send</button>
     </section>
     <hr />
     Show messages since: <input type='text' id='since' />
-    <button onclick='msgsGet()'>Refresh</button>
+    <button onclick='msgsGetRefreshClick()'>Refresh</button>
     <button onclick='autoRefreshStart()'>Start Auto-Refresh</button>
     <button onclick='autoRefreshStop()'>Stop Auto-Refresh</button>
     <section id='msgs'>
