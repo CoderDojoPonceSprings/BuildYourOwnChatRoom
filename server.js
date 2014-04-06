@@ -69,6 +69,7 @@ app.get('/msgs/:since?', function(req, res) {
 
 app.post('/msgs', function(req, res) {
   var msg = req.body;
+  console.log (msg);
   msg.timestamp = new Date();
   msgs.push(msg);
   res.send("OK");
