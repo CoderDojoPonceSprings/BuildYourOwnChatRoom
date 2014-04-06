@@ -1,0 +1,66 @@
+#msgsPublic {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAALElEQVQImWP0srRkgIETV64wIXMsdHSYkDkMDAxMyBwGBgZGIV5eOIeBgQEAR7QM8V3ILEcAAAAASUVORK5CYII=);
+  overflow: hidden; 
+}
+
+#msgsPublic article {
+  width: 85%;
+  font-family: 'Iceland', cursive;
+  border: .1em solid seagreen;
+  /*box-shadow: 5px 5px 5px #888888;*/
+  margin-bottom: 1em;
+  border-radius: .5em;
+  float:left;
+  background-color:greenyellow;
+}
+
+#msgsPublic header {
+  background-color: darkgreen;
+  color: white;
+  font-size: 125%;
+  padding: 6px;
+  border-top-left-radius: .3em;
+  border-top-right-radius: .3em;
+}
+
+#msgsPublic p {
+  padding-left: 8px;
+}
+
+#msgsPublic time {
+  color: #333333;
+  padding-left: 6px;
+  font-weight: bold;
+  font-size: 75%;
+  float: left;
+}
+
+#msgsPublic article[data-self='true'] {
+  float:right;
+  background-color:lightblue;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#msgsPublic article[data-self='true'] header {
+  border-top-right-radius: 0em;
+}
+
+#msgsPublic article:not([data-self='true']) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#msgsPublic article:not([data-self='true']) header {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#msgsPublic article[data-user='jogo'][data-self='false'] {
+  background: orange;
+}
+
+#msgsPublic article[data-user='jogo'][data-self='false'] p {
+  font-size: 150%;
+  color: purple;
+}

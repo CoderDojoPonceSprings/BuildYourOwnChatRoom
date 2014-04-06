@@ -4,18 +4,60 @@
     <title>Simple Chat by Josh Gough</title>
     <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
-    <link href='http://fonts.googleapis.com/css?family=Diplomata' rel='stylesheet' type='text/css'>  
+    <link href='http://fonts.googleapis.com/css?family=Diplomata' rel='stylesheet' type='text/css'>
+    <link id='style-dojodroid' rel='stylesheet' href='style.css' disabled />
     <script src='https://code.jquery.com/jquery-2.1.0.min.js'></script>
     <script>
-var msgs = [];
+var msgsDatabase = [];
+
+function msgsSetToSampleData() {
+  msgsDatabase.length = 0;
+
+  var newMsgs = new Object();
+  newMsgs.refreshSince = "";
+  newMsgs.msgs = []; // Empty array
+
+  newMsgs.msgs.push({
+    name:'JogoShugh',
+    text:'Hello world!',
+    timestamp: new Date()
+  });
+  
+  newMsgs.msgs.push({
+    name:'DojoCoder',
+    text:'I\'m ready to code!',
+    timestamp: new Date()
+  });
+  
+  newMsgs.msgs.push({
+    name:'Guru',
+    text:'I can code circles around JogoShugh!',
+    timestamp: new Date()
+  });
+
+  // Turn this on temporarily:
+  setDefaultUIMsgsGetCompletedFunction();
+  msgsGetCompleted(newMsgs, msgsDatabase);
+  // Reset to empty function:
+  msgsGetCompleted = function(newMsgs, allMsgs) {};
+
+}
+
+function getMyUserName() {
+  return $('#name').val();
+}
 
 function msgPost(msg, callback) {
-  //var json = JSON.stringify(msg);
-  $.post("msgs", msg, function(response) {
-      if (callback) {
-        callback(response);
-      }
-  });
+  $.post("msgs", msg, msgPostCompleted);
+}
+
+function msgPostCompleted(response) {
+  if (response == "OK") {
+    $('#text').val('');
+  } else {
+    console.log('Something went wrong trying to post new message:');
+    console.log(response);
+  }
 }
 
 function msgPostClick() {
@@ -30,190 +72,119 @@ function msgPostClick() {
       text: text,
       name: name
     };
-    msgPost(msg, function(response) {
-      if (response == "OK") {
-        $('#text').val('');
-      }
-    });
+    msgPost(msg);
   }
 }
 
 var refreshSince = '';
 
-function msgsGet(since, callback) {
+function msgsGet(since) {
+  if (!since) {
+    since = "";
+  }
   $.get("msgs/" + since, function(newMsgs) {
     newMsgs.msgs.forEach(function(msg) {
-      msgs.push(msg);
+      msgsDatabase.push(msg);
     });
+    msgsGetCompleted(newMsgs, msgsDatabase);
+  });
+}
+
+function setDefaultUIMsgsGetCompletedFunction() {
+  msgsGetCompleted = function(newMsgs, allMsgs) {
     refreshSince = newMsgs.refreshSince;
-    if (callback) {
-      callback(newMsgs, msgs);
-    }
-  });
+    /*
+      <article data-self='true' data-user='Josh'>
+        <header>You:</header>
+        <p>
+          Hey there!
+        </p>
+        <time datetime='2014-04-06T02:14:20.718Z'>10:21 PM</time>
+      </article>
+    */
+    var msgsPublic = $('#msgsPublic');
+    newMsgs.msgs.forEach(function(msg) {
+      var isMyMessage = msg.name == getMyUserName();
+      var timestamp = new Date(msg.timestamp);
+      var time = timestamp.toLocaleTimeString('en-US', 
+        {hour: '2-digit', minute:'2-digit'});
+      var newMessage = 
+        "<article style='display:none'"
+          + " data-self='" + isMyMessage + "'"
+          + " data-user='" + msg.name + "'>\n"
+          + "\t<header>" + msg.name + ":</header>\n"
+          + "\t<p>" + msg.text + "</p>\n"
+          + "\t<time datetime='" + msg.timestamp + "'>" + time + "</time>\n"
+        + "</article>";
+      var newMessageElement = $(newMessage);
+      msgsPublic.prepend(newMessageElement);
+      newMessageElement.fadeIn("slow");
+    });
+  };
 }
 
-function getMyUserName() {
-  return $('#name').val();
+function setDefaultConsoleMsgsGetCompletedFunction() {
+  msgsGetCompleted = function(newMsgs, allMsgs) {
+    refreshSince = newMsgs.refreshSince;
+    console.log('New messages count: ' + newMsgs.msgs.length);
+    newMsgs.msgs.forEach(function(msg) {
+      var isMyMessage = msg.name == getMyUserName();
+      var json = JSON.stringify(msg);
+      if (isMyMessage) {
+        console.log("You said:");
+      }
+      else {
+        console.log(msg.name + " said:");
+      }
+      console.log(json);
+    });
+    console.log('Most recently seen message date: ' + newMsgs.refreshSince);
+  };
 }
 
-function onNewMsgs(newMsgs, allMsgs) {
-  /*
-    <article data-self='true' data-user='Josh'>
-      <header>You:</header>
-      <p>
-        Hey there!
-      </p>
-      <time datetime='2014-04-06T02:14:20.718Z'>10:21 PM</time>
-    </article>
-  */
-  var msgsPublic = $('#msgsPublic');
-  newMsgs.msgs.forEach(function(msg) {
-    var isMyMessage = msg.name == getMyUserName();
-    var timestamp = new Date(msg.timestamp);
-    var time = timestamp.toLocaleTimeString("en-US", 
-      {hour: '2-digit', minute:'2-digit'});
-    var newMessage = 
-      "<article style='display:none'"
-        + " data-self='" + isMyMessage + "'"
-        + " data-user='" + msg.name + "'>\n"
-        + "\t<header>" + msg.name + ":</header>\n"
-        + "\t<p>" + msg.text + "</p>\n"
-        + "\t<time datetime='" + msg.timestamp + "'>" + time + "</time>\n"
-      + "</article>";
-    var newMessageElement = $(newMessage);
-    msgsPublic.prepend(newMessageElement);
-    newMessageElement.fadeIn("slow");
-  });
-}
-
-function msgsGetRefreshClick() {
+function msgsGetNewOnce() {
   var since = $('#since').val();
   if (!since) {
     since = refreshSince;
   }
-  msgsGet(since, onNewMsgs);
+  msgsGet(since);
 }
 
-var autoRefreshTimerId = null;
+var repeatedlyGetNewMsgsInteveralId = null;
 
-var autoRefreshListenerFunctions = [];
-
-function autoRefreshListenerAdd(listener) {
-  autoRefreshListenerFunctions.push(listener);
-}
-
-function autoRefreshStart() {
-  autoRefreshStop();
-  function autoRefreshComplete(newMsgs, allMsgs) {
-    if (autoRefreshListenerFunctions.length > 0) {
-      autoRefreshListenerFunctions.forEach(function(func) {
-        func(newMsgs, allMsgs);
-      });
-    }
+function msgsGetNewRepeatedly() {
+  stopRepeatedlyGettingNewMsgs(); // In case we already are
+  function callMsgsGet() {
+    msgsGet(refreshSince);
   }
-  function invokeMsgsGet() {
-    msgsGet(refreshSince, autoRefreshComplete);
-  }
-  autoRefreshTimerId = window.setInterval(invokeMsgsGet, 2500);
+  repeatedlyGetNewMsgsInteveralId = setInterval(callMsgsGet, 2500);
 }
 
-function autoRefreshUIStart() {
-  autoRefreshListenerAdd(onNewMsgs);
-  autoRefreshStart();  
+function stopRepeatedlyGettingNewMsgs() {
+  if (repeatedlyGetNewMsgsInteveralId != null) {
+    clearInterval(repeatedlyGetNewMsgsInteveralId);
+    repeatedlyGetNewMsgsInteveralId = null;
+  }
 }
 
-function autoRefreshStop() {
-  if (autoRefreshTimerId != null) {
-    window.clearInterval(autoRefreshTimerId);
-    autoRefreshTimerId = null;
-  }
+function toggleStyle() {
+  var sheet = $('#style-dojodroid');
+  if (sheet.attr('disabled')) sheet.removeAttr('disabled');
+  else sheet.attr('disabled', 'disabled');
 }
     </script>
-    <style>
-#msgsPublic {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAALElEQVQImWP0srRkgIETV64wIXMsdHSYkDkMDAxMyBwGBgZGIV5eOIeBgQEAR7QM8V3ILEcAAAAASUVORK5CYII=);
-  overflow: hidden; 
-}
-
-#msgsPublic article {
-  width: 85%;
-  font-family: 'Iceland', cursive;
-  border: .1em solid seagreen;
-  /*box-shadow: 5px 5px 5px #888888;*/
-  margin-bottom: 1em;
-  border-radius: .5em;
-  float:left;
-  background-color:greenyellow;
-}
-
-#msgsPublic header {
-  background-color: darkgreen;
-  color: white;
-  font-size: 125%;
-  padding: 6px;
-  border-top-left-radius: .3em;
-  border-top-right-radius: .3em;
-}
-
-#msgsPublic p {
-  padding-left: 8px;
-}
-
-#msgsPublic time {
-  color: #333333;
-  padding-left: 6px;
-  font-weight: bold;
-  font-size: 75%;
-  float: left;
-}
-
-#msgsPublic article[data-self='true'] {
-  float:right;
-  background-color:lightblue;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-#msgsPublic article[data-self='true'] header {
-  border-top-right-radius: 0em;
-}
-
-#msgsPublic article:not([data-self='true']) {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-#msgsPublic article:not([data-self='true']) header {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-#msgsPublic article[data-user='jogo'][data-self='false'] {
-  background: orange;
-}
-
-#msgsPublic article[data-user='jogo'][data-self='false'] p {
-  font-size: 150%;
-  color: purple;
-}
-
-/*
-#msgsPublic article[data-user='sally'] p {
-  font-family: 'Diplomata', cursive;  
-}
-*/
-    </style>
   </head>
   <body>
+    <button onclick='toggleStyle()'>Turn on style</button>
     <section id='form'>
       Your Name: <input type='text' id='name' />
       <br />
       Message: <input type='text' id='text' /> <button onclick='msgPostClick()'>Send</button>
       <hr />
       Show messages since: <input type='text' id='since' />
-      <button onclick='msgsGetRefreshClick()'>Refresh</button>
-      <button onclick='autoRefreshUIStart()'>Start Auto-Refresh</button>
-      <button onclick='autoRefreshStop()'>Stop Auto-Refresh</button>
+      <button onclick='msgsGetNewOnce()'>Get new messages (one time)</button>
+      <button onclick='msgsGetNewRepeatedly()'>Get new messages repeatedly</button>
+      <button onclick='stopRepeatedlyGettingNewMsgs()'>Stop repeatedly getting new messages</button>
     </section>
     <section id="msgsPublic">
       <article data-self='true' data-user='Josh'>
