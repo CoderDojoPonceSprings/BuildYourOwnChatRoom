@@ -1,0 +1,37 @@
+#form {
+  padding: .5em;
+  background: white;
+  color: black;
+  text-shadow: none;
+}
+
+#form select, input {
+  border: .1em solid navy;
+}
+
+#form button {
+  border: .1em solid navy;
+}
+  
+#msgsPublic {
+  border-top: .1em solid navy;
+}
+
+#msgsPublic {
+  border: .1em solid navy;
+  overflow: hidden; 
+}
+
+#msgsPublic article {
+  width: 85%;
+  border: .1em solid navy;
+  margin-bottom: .5em;
+}
+
+#msgsPublic header {  
+  border: .1em solid navy;
+}
+
+#msgsPublic time {
+  border: .1em solid navy;
+}
