@@ -14,12 +14,24 @@
 }
 
 #msgsPublic header {
-  background-color: darkgreen;
   color: white;
   font-size: 125%;
   padding: 6px;
   border-top-left-radius: .3em;
   border-top-right-radius: .3em;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.12, #7F805C),
+    color-stop(1, #0B4D0F)
+  );
+  background-image: -o-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: -moz-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: -webkit-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: -ms-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: linear-gradient(to bottom, #7F805C 12%, #0B4D0F 100%);  
+  
 }
 
 #msgsPublic p {

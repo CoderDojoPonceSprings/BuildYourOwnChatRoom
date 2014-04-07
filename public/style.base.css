@@ -37,7 +37,7 @@ body {
   background: black;
   color: white;
   border: 1px solid #666666;
-  padding: 8px;
+  padding: 4px;
 }
   
 #msgsPublic {
@@ -45,19 +45,7 @@ body {
 }
 
 #msgsControls {
-  /* background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAIAAADwyuo0AAAAIklEQVQImWNkZuJgZmFgYGD4+4eBhZmFgdlUj4GBgeH0JQAmggQdVPtRBgAAAABJRU5ErkJggg==); */
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    color-stop(0.12, #7F805C),
-    color-stop(1, #0B4D0F)
-  );
-  background-image: -o-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
-  background-image: -moz-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
-  background-image: -webkit-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
-  background-image: -ms-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
-  background-image: linear-gradient(to bottom, #7F805C 12%, #0B4D0F 100%);  
+  background: lime;
 }
 
 #pauseGettingMsgsButton {
