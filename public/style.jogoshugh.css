@@ -1,0 +1,109 @@
+#msgsPublic {
+  background: #36c;
+  background: 
+    linear-gradient(115deg, transparent 75%, rgba(255,255,255,.8) 75%) 0 0,
+    linear-gradient(245deg, transparent 75%, rgba(255,255,255,.8) 75%) 0 0,
+    linear-gradient(115deg, transparent 75%, rgba(255,255,255,.8) 75%) 7px -15px,
+    linear-gradient(245deg, transparent 75%, rgba(255,255,255,.8) 75%) 7px -15px,
+    #36c;
+  background-size: 15px 30px;
+  overflow: hidden; 
+}
+
+#msgsPublic article {
+  width: 85%;
+  color: white;
+  text-shadow: 2px 2px #000000;
+  font-family: 'sans-serif';
+  border: .1em solid navy;
+  box-shadow: 5px 5px 5px #888888;
+  margin-bottom: 1em;
+  border-radius: .5em;
+  float:left;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.12, #E6ED0C),
+    color-stop(1, #118515)
+  );
+  background-image: -o-linear-gradient(bottom, #E6ED0C 12%, #118515 100%);
+  background-image: -moz-linear-gradient(bottom, #E6ED0C 12%, #118515 100%);
+  background-image: -webkit-linear-gradient(bottom, #E6ED0C 12%, #118515 100%);
+  background-image: -ms-linear-gradient(bottom, #E6ED0C 12%, #118515 100%);
+  background-image: linear-gradient(to bottom, #E6ED0C 12%, #118515 100%);  
+}
+
+#msgsPublic header {  
+  color: white;
+  font-size: 125%;
+  padding: 6px;
+  border-top-left-radius: .3em;
+  border-top-right-radius: .3em;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.12, #00254F),
+    color-stop(1, #117985)
+  );
+  background-image: -o-linear-gradient(bottom, #00254F 12%, #117985 100%);
+  background-image: -moz-linear-gradient(bottom, #00254F 12%, #117985 100%);
+  background-image: -webkit-linear-gradient(bottom, #00254F 12%, #117985 100%);
+  background-image: -ms-linear-gradient(bottom, #00254F 12%, #117985 100%);
+  background-image: linear-gradient(to bottom, #00254F 12%, #117985 100%);
+}
+
+#msgsPublic p {
+  padding-left: 8px;
+  font-weight: bold;  
+}
+
+#msgsPublic time {
+  color: yellow;
+  padding-left: 6px;
+  font-weight: bold;
+  font-size: 75%;
+  float: left;
+}
+
+#msgsPublic article[data-self='true'] {
+  float:right;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.55, #29031B),
+    color-stop(1, #852E11)
+  );
+  background-image: -o-linear-gradient(bottom, #29031B 55%, #852E11 100%);
+  background-image: -moz-linear-gradient(bottom, #29031B 55%, #852E11 100%);
+  background-image: -webkit-linear-gradient(bottom, #29031B 55%, #852E11 100%);
+  background-image: -ms-linear-gradient(bottom, #29031B 55%, #852E11 100%);
+  background-image: linear-gradient(to bottom, #29031B 55%, #852E11 100%);
+}
+
+#msgsPublic article[data-self='true'] header {
+  border-top-right-radius: 0em;
+}
+
+#msgsPublic article:not([data-self='true']) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#msgsPublic article:not([data-self='true']) header {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#msgsPublic article[data-user='jogo'][data-self='false'] {
+  background: orange;
+}
+
+#msgsPublic article[data-user='jogo'][data-self='false'] p {
+  font-size: 150%;
+  color: purple;
+}

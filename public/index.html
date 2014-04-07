@@ -5,7 +5,9 @@
     <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
     <link href='http://fonts.googleapis.com/css?family=Diplomata' rel='stylesheet' type='text/css'>
-    <link id='style-dojodroid' rel='stylesheet' href='style.css' disabled />
+    <link id='style-none' rel='stylesheet' href='style.none.css' />    
+    <link id='style-dojodroid' rel='stylesheet' href='style.dojodroid.css' disabled />
+    <link id='style-jogoshugh' rel='stylesheet' href='style.jogoshugh.css' disabled />    
     <script src='https://code.jquery.com/jquery-2.1.0.min.js'></script>
     <script>
 var msgsDatabase = [];
@@ -167,15 +169,26 @@ function stopRepeatedlyGettingNewMsgs() {
   }
 }
 
-function toggleStyle() {
-  var sheet = $('#style-dojodroid');
-  if (sheet.attr('disabled')) sheet.removeAttr('disabled');
-  else sheet.attr('disabled', 'disabled');
+function styleApply() {
+  var selectedStyle = $('#styles').val();
+  var sheet = $('#style-' + selectedStyle);
+  sheet.removeAttr('disabled');
+  $('link[rel=stylesheet]').each(function() {    
+    // The function is "applied" in the context of each matching
+    // element. So, the 'this' object points to the element.
+    if (this.id != 'style-' + selectedStyle) $(this).attr('disabled', 'disabled');
+  });
 }
     </script>
   </head>
   <body>
-    <button onclick='toggleStyle()'>Turn on style</button>
+    Style: 
+    <select id='styles'>
+      <option value='none'>None</option>       
+      <option value='dojodroid'>Dojo Droid</option>
+      <option value='jogoshugh'>JogoShugh</option>
+    </select>
+    <button onclick='styleApply()'>Apply</button>
     <section id='form'>
       Your Name: <input type='text' id='name' />
       <br />
