@@ -3,7 +3,8 @@
   <head>
     <title>Simple Chat by Josh Gough</title>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">    
-    <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' 
+    <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' />
+    <link href='style.base.css' rel='stylesheet' />
     <link id='style-none' rel='stylesheet' href='style.none.css' disabled />    
     <link id='style-dojodroid' rel='stylesheet' href='style.dojodroid.css' />
     <link id='style-jogoshugh' rel='stylesheet' href='style.jogoshugh.css' disabled />    
@@ -180,7 +181,7 @@ function styleApply() {
   $('link[rel=stylesheet]').each(function() {    
     // The function is "applied" in the context of each matching
     // element. So, the 'this' object points to the element.
-    if (this.id != 'style-' + selectedStyle) $(this).attr('disabled', 'disabled');
+    if (this.id && this.id != 'style-' + selectedStyle) $(this).attr('disabled', 'disabled');
   });
 }
 
@@ -193,25 +194,28 @@ $(function() {
     </script>
   </head>
   <body>
-    Style: 
-    <select id='styles'>
-      <option value='none'>None</option>       
-      <option value='dojodroid' selected>Dojo Droid</option>
-      <option value='jogoshugh'>JogoShugh</option>
-    </select>
-    <button onclick='styleApply()'>Apply</button>
-    <section id='form'>
-      Your Name: <input type='text' id='name' />
+    <section id="form">
+      <input type='text' id='name' placeholder="Your name" />
+      <input type='text' id='text' style='width:50%' placeholder="Type a message" /> <button onclick='msgPostClick()'><i class="fa fa-comment-o"></i>&nbsp;Send</button>  
       <br />
-      Message: <input type='text' id='text' /> <button onclick='msgPostClick()'>Send</button>
-      <hr />
-      <button
+      <div id='stylesControls'>    
+        Change Styles:
+        <select id='styles'>
+          <option value='none'>None</option>       
+          <option value='dojodroid' selected>Dojo Droid</option>
+          <option value='jogoshugh'>JogoShugh</option>
+        </select>
+        <button id='styleApplyButton' onclick='styleApply()'><i class="fa fa-hand-o-right"></i>&nbsp;Apply</button>
+      </div>
+    </section>
+    <section id="msgsControls">
+      <button        
         id='pauseGettingMsgsButton'
         onclick='stopRepeatedlyGettingNewMsgs(); allowGetMsgsButton();'><i class="fa fa-pause"></i>&nbsp;Pause</button>      
       <button
         id='getMsgsButton'
         onclick='msgsGetNewRepeatedly(); allowPauseGetttingMsgsButton();'
-        disabled><i class="fa fa-play"></i>&nbsp;Receive Messages</button>
+        disabled><i class="fa fa-play"></i>&nbsp;Play</button>      
     </section>
     <section id="msgsPublic">
       <article data-self='true' data-user='Josh'>
