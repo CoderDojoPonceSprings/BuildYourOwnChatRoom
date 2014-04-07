@@ -2,11 +2,10 @@
 <html>
   <head>
     <title>Simple Chat by Josh Gough</title>
-    <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
-    <link href='http://fonts.googleapis.com/css?family=Diplomata' rel='stylesheet' type='text/css'>
-    <link id='style-none' rel='stylesheet' href='style.none.css' />    
-    <link id='style-dojodroid' rel='stylesheet' href='style.dojodroid.css' disabled />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">    
+    <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' 
+    <link id='style-none' rel='stylesheet' href='style.none.css' disabled />    
+    <link id='style-dojodroid' rel='stylesheet' href='style.dojodroid.css' />
     <link id='style-jogoshugh' rel='stylesheet' href='style.jogoshugh.css' disabled />    
     <script src='https://code.jquery.com/jquery-2.1.0.min.js'></script>
     <script>
@@ -37,12 +36,7 @@ function msgsSetToSampleData() {
     timestamp: new Date()
   });
 
-  // Turn this on temporarily:
-  setDefaultUIMsgsGetCompletedFunction();
   msgsGetCompleted(newMsgs, msgsDatabase);
-  // Reset to empty function:
-  msgsGetCompleted = function(newMsgs, allMsgs) {};
-
 }
 
 function getMyUserName() {
@@ -95,17 +89,17 @@ function msgsGet(since) {
 function setDefaultUIMsgsGetCompletedFunction() {
   msgsGetCompleted = function(newMsgs, allMsgs) {
     refreshSince = newMsgs.refreshSince;
-    /*
-      <article data-self='true' data-user='Josh'>
-        <header>You:</header>
-        <p>
-          Hey there!
-        </p>
-        <time datetime='2014-04-06T02:14:20.718Z'>10:21 PM</time>
-      </article>
-    */
     var msgsPublic = $('#msgsPublic');
     newMsgs.msgs.forEach(function(msg) {
+      /* This is the HTML structure we need to created for each message:
+        <article data-self='true' data-user='DojoCoder'>
+          <header>DojoCoder:</header>
+          <p>
+            I'm ready to code!
+          </p>
+          <time datetime='2014-04-06T02:14:20.718Z'>10:21 PM</time>
+        </article>
+      */      
       var isMyMessage = msg.name == getMyUserName();
       var timestamp = new Date(msg.timestamp);
       var time = timestamp.toLocaleTimeString('en-US', 
@@ -169,6 +163,16 @@ function stopRepeatedlyGettingNewMsgs() {
   }
 }
 
+function allowGetMsgsButton() {
+  $("#pauseGettingMsgsButton").attr("disabled", "disabled"); 
+  $("#getMsgsButton").removeAttr("disabled");
+}
+
+function allowPauseGetttingMsgsButton() {
+  $("#pauseGettingMsgsButton").removeAttr("disabled");
+  $("#getMsgsButton").attr("disabled", "disabled");
+}
+
 function styleApply() {
   var selectedStyle = $('#styles').val();
   var sheet = $('#style-' + selectedStyle);
@@ -179,13 +183,20 @@ function styleApply() {
     if (this.id != 'style-' + selectedStyle) $(this).attr('disabled', 'disabled');
   });
 }
+
+$(function() {
+  // Configure some defaults
+  setDefaultUIMsgsGetCompletedFunction();
+  msgsSetToSampleData();
+  msgsGetNewRepeatedly();
+});
     </script>
   </head>
   <body>
     Style: 
     <select id='styles'>
       <option value='none'>None</option>       
-      <option value='dojodroid'>Dojo Droid</option>
+      <option value='dojodroid' selected>Dojo Droid</option>
       <option value='jogoshugh'>JogoShugh</option>
     </select>
     <button onclick='styleApply()'>Apply</button>
@@ -194,10 +205,13 @@ function styleApply() {
       <br />
       Message: <input type='text' id='text' /> <button onclick='msgPostClick()'>Send</button>
       <hr />
-      Show messages since: <input type='text' id='since' />
-      <button onclick='msgsGetNewOnce()'>Get new messages (one time)</button>
-      <button onclick='msgsGetNewRepeatedly()'>Get new messages repeatedly</button>
-      <button onclick='stopRepeatedlyGettingNewMsgs()'>Stop repeatedly getting new messages</button>
+      <button
+        id='pauseGettingMsgsButton'
+        onclick='stopRepeatedlyGettingNewMsgs(); allowGetMsgsButton();'><i class="fa fa-pause"></i>&nbsp;Pause</button>      
+      <button
+        id='getMsgsButton'
+        onclick='msgsGetNewRepeatedly(); allowPauseGetttingMsgsButton();'
+        disabled><i class="fa fa-play"></i>&nbsp;Receive Messages</button>
     </section>
     <section id="msgsPublic">
       <article data-self='true' data-user='Josh'>
@@ -257,9 +271,6 @@ function styleApply() {
       </ul>
       <h1></h1>
     </p>
-
-
-
       <p>First, get a sheet of paper and a pencil or find a whiteboard and a marker.
 
     </aside>
