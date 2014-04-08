@@ -164,15 +164,29 @@ function allowPauseGetttingMsgsButton() {
   $("#getMsgsButton").attr("disabled", "disabled");
 }
 
+function styleGetChoices() {
+  $.getJSON( "styles", function(data) {
+    var styles = $('#styles')[0];
+    styles = $(styles);
+    data.forEach(function(item) {
+      styles.append('<option value="' + item.name + '|' + item.id + '">' + item.name + ' by ' + item.user + '</option>');
+    });
+  });  
+}
+
 function styleApply() {
-  var selectedStyle = $('#styles').val();
-  var sheet = $('#style-' + selectedStyle);
-  sheet.removeAttr('disabled');
-  $('link[rel=stylesheet]').each(function() {    
-    // The function is "applied" in the context of each matching
-    // element. So, the 'this' object points to the element.
-    if (this.id && this.id != 'style-' + selectedStyle) $(this).attr('disabled', 'disabled');
-  });
+  var styleNew = $('#styles').val().split('|');
+  var href = 'http://run.plnkr.co/plunks/' + styleNew[1] + '/style.css';
+  $('body').append('<link id="style-' 
+    + styleNew[0] + '" rel="stylesheet" href="'
+    + href + '" type="text/css" />');  
+  setTimeout(function() {
+    $('link[rel=stylesheet]').each(function() {
+      // The function is "applied" in the context of each matching
+      // element. So, the 'this' object points to the element.
+      if (this.id && this.id != 'style-' + styleNew[0]) $(this).attr('disabled', 'disabled');
+    });
+  }, 1500);
 }
 
 $(function() {
@@ -183,4 +197,5 @@ $(function() {
   $('#text').bind("keypress", function(e) {
     if (e.keyCode === 13) msgPostClick();
   });
+  styleGetChoices();
 });

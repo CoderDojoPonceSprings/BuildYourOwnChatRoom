@@ -1,5 +1,7 @@
 var express = require('express'),
-    app 	= express();
+    app 	  = express(),
+    request = require('request'),
+    _       = require('underscore');
 
 // Keep an array of messages
 var msgs = [];
@@ -73,6 +75,23 @@ app.post('/msgs', function(req, res) {
   msg.timestamp = new Date();
   msgs.push(msg);
   res.send("OK");
+});
+
+app.get('/styles', function(req, res) {
+  request.get('http://api.plnkr.co/tags/byocstyle', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      body = JSON.parse(body);
+      var userStyles = _.map(body, function(item) {
+        var url = item.url;
+        return {
+          user: item.user.login,
+          name: item.description,
+          id: item.id
+        }
+      });
+      res.json(userStyles);      
+    }
+  });
 });
 
 var port = process.env.PORT || 80;
