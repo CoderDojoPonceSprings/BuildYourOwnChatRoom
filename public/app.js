@@ -175,18 +175,27 @@ function styleGetChoices() {
 }
 
 function styleApply() {
-  var styleNew = $('#styles').val().split('|');
-  var href = 'http://run.plnkr.co/plunks/' + styleNew[1] + '/style.css';
-  $('body').append('<link id="style-' 
-    + styleNew[0] + '" rel="stylesheet" href="'
-    + href + '" type="text/css" />');  
+  var styleVals = $('#styles').val().split('|');
+  var href = 'http://run.plnkr.co/plunks/' + styleVals[1] + '/style.css';
+  var styleId = "style-" + styleVals[1];
+  // Check if we already have this style
+  var style = $('#' + styleId);
+  if (style.length == 0) {
+    $('body').append('<link id="' + styleId + '" '
+      + 'rel="stylesheet" href="'
+      + href + '" type="text/css" />');
+  }  
   setTimeout(function() {
     $('link[rel=stylesheet]').each(function() {
       // The function is "applied" in the context of each matching
       // element. So, the 'this' object points to the element.
-      if (this.id && this.id != 'style-' + styleNew[0]) $(this).attr('disabled', 'disabled');
+      if (this.id && this.id != styleId) {
+        $(this).attr('disabled', 'disabled')
+      } else if (this.id && this.id == styleId) {
+        $(this).removeAttr('disabled');
+      }
     });
-  }, 1500);
+  }, 1000);
 }
 
 $(function() {
