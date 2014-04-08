@@ -3,6 +3,6 @@
   "dependencies": {
     "express": "~3.3.4",
     "underscore" : "*",
-    "socket.io" : "*"
+    "request" : "*"
   }
 }
