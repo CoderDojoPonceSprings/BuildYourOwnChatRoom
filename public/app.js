@@ -191,6 +191,7 @@ function styleApply() {
       // element. So, the 'this' object points to the element.
       if (this.id && this.id != styleId) {
         $(this).attr('disabled', 'disabled')
+        this.disabled = 'disabled';
       } else if (this.id && this.id == styleId) {
         $(this).removeAttr('disabled');
       }
