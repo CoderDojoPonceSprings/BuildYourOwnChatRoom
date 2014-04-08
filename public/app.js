@@ -164,6 +164,36 @@ function allowPauseGetttingMsgsButton() {
   $("#getMsgsButton").attr("disabled", "disabled");
 }
 
+function signInWithGitHub() {
+  var height, left, screenHeight, top, width;
+  width = 1000;
+  height = 650;
+  screenHeight = screen.height;
+  left = Math.round((screen.width / 2) - (width / 2));
+  top = 0;
+  if (screenHeight > height) {
+    top = Math.round((screenHeight / 2) - (height / 2));
+  }
+  this.loginWindow = window.open("auth.html", "Sign in with Github", "left=" + left + ",top=" + top + ",width=" + width + ",height=" + height + ",personalbar=0,toolbar=0,scrollbars=1,resizable=1");
+}
+
+var token = null;
+
+function handleSignInWithGitHubSuccess(code) {
+  $.getJSON('/authenticate/'+code, function(data) {
+    token = data.token;
+    var gh = new Github({
+      token: token,
+      auth: 'oauth'
+    });
+    var user = gh.getUser();
+    user.show('', function(err, user) { 
+      console.log(user.login);
+      console.log(user.avatar_url + "s=18");
+    });
+  });
+}
+
 function styleGetChoices() {
   $.getJSON( "styles", function(data) {
     var styles = $('#styles')[0];

@@ -1,7 +1,8 @@
 var express = require('express'),
     app 	  = express(),
     request = require('request'),
-    _       = require('underscore');
+    _       = require('underscore'),
+    githubauth = require('./githubauth');
 
 // Keep an array of messages
 var msgs = [];
@@ -35,6 +36,7 @@ app.use(function(req, res, next) {
   }
 });
 
+
 app.use(express.urlencoded());
 
 function createResponse(newMsgs) {
@@ -47,6 +49,8 @@ function createResponse(newMsgs) {
     refreshSince: refreshSince
   };
 }
+
+githubauth(app);
 
 app.get('/msgs/:since?', function(req, res) {
   if (!req.params.since) {
