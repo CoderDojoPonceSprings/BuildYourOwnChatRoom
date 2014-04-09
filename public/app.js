@@ -189,6 +189,8 @@ function handleSignInWithGitHubSuccess(code) {
     var user = gh.getUser();
     user.show('', function(err, user) { 
       console.log(user.login);
+      $('#name').val(user.login);
+      $('#name').attr('disabled', 'disabled');
       console.log(user.avatar_url + "s=18");
     });
   });
