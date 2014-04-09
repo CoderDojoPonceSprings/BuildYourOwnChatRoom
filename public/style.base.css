@@ -1,5 +1,17 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 0 !important;
   font-family: sans-serif;
+}
+
+input, select, option {
+	color: black !important;
+}
+
+#byocBrand {
+	font-size: 1.35em;
+}
+
+.navbar {
+	margin-bottom: 0 !important;
 }
