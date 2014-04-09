@@ -1,0 +1,154 @@
+#form {
+  padding: 5px;
+  background: #755D5D;
+  border-bottom: 8px solid black;
+  color: rgb(236, 216, 252);
+  text-shadow: 2px 2px #000000;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #666;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #666;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #666;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #666;
+}
+
+#form select, input {
+  background: rgb(116, 32, 109);  
+  border: 1px solid black;
+  box-shadow: 2px 2px 2px #444444;
+  padding: 4px;
+}
+
+#form button {
+  font-weight: bold;
+  background: rgb(164, 108, 207);
+  color: white;
+  border: 1px solid #666666;
+  padding: 4px;
+}
+  
+#msgsPublic {
+  border-top: 8px solid black;
+}
+
+#msgsControls {
+  background: rgb(133, 40, 141);
+}
+
+#pauseGettingMsgsButton {
+  background: black;
+  padding: 8px;
+  color: red;
+  font-weight: bold;
+  border: none;
+}
+
+#pauseGettingMsgsButton[disabled] {
+  background: #333333;
+  padding: 8px;
+  color: darkred;
+  font-weight: bold;
+  border: none;
+}
+
+#getMsgsButton {
+  background: black;
+  padding: 8px;
+  color: green;
+  font-weight: bold;
+  border: none;  
+}
+
+#getMsgsButton[disabled] {
+  background: #333333;
+  padding: 8px;
+  color: darkgreen;  
+  font-weight: bold;
+  border: none;  
+}
+
+#msgsPublic {
+  /* background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAALElEQVQImWP0srRkgIETV64wIXMsdHSYkDkMDAxMyBwGBgZGIV5eOIeBgQEAR7QM8V3ILEcAAAAASUVORK5CYII=); */
+  overflow: hidden; 
+  background-color: #592C6E;
+}
+
+#msgsPublic article {
+  width: 85%;
+  font-family: 'Iceland', cursive;
+  border: .1em solid seagreen;
+  margin-bottom: 1em;
+  border-radius: .5em;
+  float:left;
+  background-color: rgb(118, 158, 228);
+}
+
+#msgsPublic header {
+  color: white;
+  font-size: 125%;
+  padding: 6px;
+  border-top-left-radius: .3em;
+  border-top-right-radius: .3em;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.12, #7F805C),
+    color-stop(1, #0B4D0F)
+  );
+  background-image: -o-linear-gradient(bottom, blue 12%, #0B4D0F 100%);
+  background-image: -moz-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: -webkit-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: -ms-linear-gradient(bottom, #7F805C 12%, #0B4D0F 100%);
+  background-image: linear-gradient(to bottom, #C2FD82 12%, #250A57 100%);  
+
+}
+
+#msgsPublic p {
+  padding-left: 8px;
+}
+
+#msgsPublic time {
+  color: #333333;
+  padding-left: 6px;
+  font-weight: bold;
+  font-size: 75%;
+  float: left;
+}
+
+#msgsPublic article[data-self='true'] {
+  float:right;
+  background-color: rgb(204, 123, 129);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#msgsPublic article[data-self='true'] header {
+  border-top-right-radius: 0em;
+}
+
+#msgsPublic article:not([data-self='true']) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#msgsPublic article:not([data-self='true']) header {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#msgsPublic article[data-user='jogo'][data-self='false'] {
+  background: orange;
+}
+
+#msgsPublic article[data-user='jogo'][data-self='false'] p {
+  font-size: 150%;
+  color: purple;
+}

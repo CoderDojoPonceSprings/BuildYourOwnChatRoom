@@ -193,6 +193,7 @@ function handleSignInWithGitHubSuccess(code) {
       $('#signedInUserName').text(user.login);
       $('#signedInUserAvatar').attr("src", user.avatar_url + "s=18");
       $('#name').val(user.login);
+      $('#greeting').text(user.login + ", start chating!");
     });
   });
 }
