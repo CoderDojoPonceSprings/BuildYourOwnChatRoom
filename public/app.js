@@ -51,7 +51,7 @@ function msgPostClick() {
   if (!text) {
     alert('Please type a message in the textbox before sending!');
   } else if (!name) {
-    alert('Please type your name in the textbox before sending!');
+    alert('Please sign in with GitHub first before trying to send a message!');
   } else {
     var msg = {
       text: text,
@@ -188,10 +188,11 @@ function handleSignInWithGitHubSuccess(code) {
     });
     var user = gh.getUser();
     user.show('', function(err, user) { 
-      console.log(user.login);
+      $('#signInWithGitHubButton').hide();
+      $('#signedInUserNameDisplay').show();
+      $('#signedInUserName').text(user.login);
+      $('#signedInUserAvatar').attr("src", user.avatar_url + "s=18");
       $('#name').val(user.login);
-      $('#name').attr('disabled', 'disabled');
-      console.log(user.avatar_url + "s=18");
     });
   });
 }

@@ -4,13 +4,35 @@
     <title>Simple Chat by Josh Gough</title>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Iceland' rel='stylesheet' />
+    <link rel='stylesheet' href='lib/bootstrap/css/bootstrap.min.css' />
     <link href='style.base.css' rel='stylesheet' />
     <script src='https://code.jquery.com/jquery-2.1.0.min.js'></script>
+    <script src='lib/bootstrap/js/bootstrap.min.js'></script>    
     <script src='github.js'></script>
     <script src='app.js'></script>
   </head>
-  <body>
-    <button onclick="signInWithGitHub()"><i class="fa fa-github-alt"></i> Sign In with GitHub</button>
+  <body class='container-fluid center' ng-cloak ng-controller='tutorialController'>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <span class='navbar-brand'><i class="fa fa-comments-o" id='byocBrand'></i></i> <strong>BYOC</strong>: <em>build your own chatroom!</em></span>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right nav-pills" ng-controller='identityController'>
+            <li id='signInWithGitHubButton'><a style='background: green; color: white' onclick='signInWithGitHub()' href="#"><i class="fa fa-github-alt"></i> Sign In with GitHub</a></li>
+            <li id='signedInUserNameDisplay' style='background: darkblue; display:none;'><a style='color: white' href="#"><img id='signedInUserAvatar' src="" height='18' width='18' />&nbsp;<strong>Welcome, <span id='signedInUserName'></span></strong></a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
     <section id="form">
       <details id='stylesControls'>
         <summary>Customize</summary>
@@ -21,8 +43,8 @@
         <button id='styleApplyButton' onclick='styleApply()'><i class="fa fa-hand-o-right"></i>&nbsp;Apply</button>
       </details>
       <h3>Type your name and a message to share with your friends</h3>
-      <input type='text' id='name' placeholder="Your name" />
-      <input type='text' id='text' style='width:50%' placeholder="Type a message" /> <button onclick='msgPostClick()'><i class="fa fa-comment-o"></i>&nbsp;Send</button>  
+      <input type='hidden' id='name' />
+      <input type='text' id='text' style='width:75%' placeholder="Sign in first then type a message" /> <button onclick='msgPostClick()'><i class="fa fa-comment-o"></i>&nbsp;Send</button>  
     </section>
     <section id="msgsControls">
       <button        
